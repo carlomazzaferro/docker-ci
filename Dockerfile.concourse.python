@@ -1,9 +1,29 @@
-FROM python:3.6.1-alpine
+FROM frolvlad/alpine-python3
 
 RUN apk --no-cache add \
     bash \
     unzip \
     curl
+
+RUN apk add --no-cache \
+        --virtual=.build-dependencies \
+        openblas-dev g++ gfortran file binutils \
+        musl-dev python3-dev && \
+    apk add libstdc++ openblas && \
+    \
+    ln -s locale.h /usr/include/xlocale.h && \
+    \
+    pip install sagemaker && \
+    \
+    rm -r /root/.cache && \
+    find /usr/lib/python3.*/ -name 'tests' -exec rm -r '{}' + && \
+    find /usr/lib/python3.*/site-packages/ -name '*.so' -print -exec sh -c 'file "{}" | grep -q "not stripped" && strip -s "{}"' \; && \
+    \
+    rm /usr/include/xlocale.h && \
+    \
+    apk del .build-dependencies
+
+RUN pip install awscli chalice
 
 ENV TERRAFORM_VERSION=0.11.11
 
@@ -12,6 +32,6 @@ COPY ./tf_install_alpine.sh /root/tf_install_alpine.sh
 RUN /root/tf_install_alpine.sh -i ${TERRAFORM_VERSION}
 
 RUN pip install --upgrade pip
-RUN pip install awscli chalice
+RUN pip install awscli chalice boto3
 
 ENTRYPOINT sh
