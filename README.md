@@ -52,6 +52,37 @@ Ideal for:
  - Deploying images with the terraform CLI using a pretty small image
 
 
+### Alpine Python + Scientific libs (numpy, sagemaker) + awscli + Terraform
+
+- File: `Dockerfile.concourse.python`
+- Pull: `carlomazzaferro/concourse-tf-python`
+
+
+Size: 350 MB
+
+Ideal for:
+
+ - Provision terraform infra and do Sagemaker-related operations such as deploying models, until when terraform [supports
+ it fully](https://github.com/terraform-providers/terraform-provider-aws/issues/2493)
+ 
+ 
+### Python + TensorFlow + awscli + Terraform
+
+- File: `Dockerfile.concourse.tensorflow`
+- Pull: `carlomazzaferro/concourse-tf-python-tensorflow`
+
+
+Size: 1.4 GB
+
+Ideal for:
+
+ - Provision terraform infra and do Sagemaker-related operations such as training TensorFlow models
+ 
+ 
+
+
+
+
 
 
 
