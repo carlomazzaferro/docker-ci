@@ -1,0 +1,8 @@
+FROM python:3.6.6
+
+RUN pip install sagemaker==1.18.4
+RUN pip install chalice==1.7.0
+RUN pip install awscli
+RUN pip install Pillow==5.4.1
+
+ENTRYPOINT sh
