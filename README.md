@@ -1,11 +1,11 @@
 # Docker + CI
 
-Set of docker files that are useful for running ci/cd workflow on CircleCI. 
+Set of docker files that are useful for running ci/cd workflow on CircleCI and Concourse. 
 Come pre-packaged with a set of tools that may be useful for folks working with Terrafom, AWS CLI, Node, Python and docker 
 (as in, you can run docker commands from within these containers. 
 See: https://circleci.com/docs/2.0/circleci-images/#pre-installed-tools) for the entire set of available pre-packaged tools.
 
-These all use `slim` base images to improve images size. 
+These mostly use `slim` base images to improve images size. 
 
 ## Images
 
