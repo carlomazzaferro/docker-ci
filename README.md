@@ -9,11 +9,14 @@ These all use `slim` base images to improve images size.
 
 ## Images
 
-### Node + Terraform + DinD + awscli
+
+### CircleCI
+
+#### Node + Terraform + DinD + awscli
 
 Details:
 
- - File: `Dockerfile.circle`
+ - File: `circleci/Dockerfile.circle`
  - Pull: `docker pull carlomazzaferro/circle-ci-cm`
 
 Specs:
@@ -30,17 +33,17 @@ Ideal for:
 
 Size: 998MB
 
-### Python + DinD + awscli
+#### Python + DinD + awscli
 
-- File: `Dockerfile.circle.awscli`
+- File: `circleci/Dockerfile.circle.awscli`
 - Pull: `carlomazzaferro/circle-ci-awscli`
 - All the tools from [CircleCI base images](https://circleci.com/docs/2.0/circleci-images/#pre-installed-tools)
 
 Size: 620MB
 
-### Terraform + DinD
+#### Terraform + DinD
 
-- File: `Dockerfile.circle.terraform`
+- File: `circleci/Dockerfile.circle.terraform`
 - Pull: `carlomazzaferro/circle-ci-terraform`
 - Some of the tools from [CircleCI base images](https://circleci.com/docs/2.0/circleci-images/#pre-installed-tools). 
 See Dockerfile definition for more info.
@@ -52,9 +55,11 @@ Ideal for:
  - Deploying images with the terraform CLI using a pretty small image
 
 
-### Alpine Python + Scientific libs (numpy, sagemaker) + awscli + Terraform
+### Concourse
 
-- File: `Dockerfile.concourse.python`
+#### Alpine Python + Scientific libs (numpy, sagemaker) + awscli + Terraform
+
+- File: `concourse/Dockerfile.concourse.python`
 - Pull: `carlomazzaferro/concourse-tf-python`
 
 
@@ -66,9 +71,9 @@ Ideal for:
  it fully](https://github.com/terraform-providers/terraform-provider-aws/issues/2493)
  
  
-### Python + TensorFlow + awscli + Terraform
+#### Python + TensorFlow + awscli + Terraform
 
-- File: `Dockerfile.concourse.tensorflow`
+- File: `concourse/Dockerfile.concourse.tensorflow`
 - Pull: `carlomazzaferro/concourse-tf-python-tensorflow`
 
 
