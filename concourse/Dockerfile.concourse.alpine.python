@@ -23,15 +23,16 @@ RUN apk add --no-cache \
     \
     apk del .build-dependencies
 
-RUN pip install awscli chalice
+RUN pip install awscli
 
-ENV TERRAFORM_VERSION=0.11.11
+ARG TERRAFORM_VERSION
+ENV TERRAFORM_VERSION=$TERRAFORM_VERSION
 
 COPY ./tf_install_alpine.sh /root/tf_install_alpine.sh
 
 RUN /root/tf_install_alpine.sh -i ${TERRAFORM_VERSION}
 
 RUN pip install --upgrade pip
-RUN pip install awscli chalice boto3
+RUN pip install awscli
 
 ENTRYPOINT sh

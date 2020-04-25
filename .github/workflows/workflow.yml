@@ -1,0 +1,113 @@
+name: docker-ci
+
+on:
+  push:
+
+env:
+  GH_REE_TOKEN: ${{ secrets.GH_REE_TOKEN }}
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  TERRAFORM_VERSION: 0.12.24
+  DOCKER_VERSION: 19.03.8-ce
+  DOCKER_COMPOSE_VERSION: 1.25.4
+  VERSION: latest
+
+jobs:
+  alpine-python-terraform-aws:
+    name: alpine-python-terraform-aws
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: alpine-python-terraform-aws
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+
+      - name: Build
+        run: |
+          docker build -t docker.pkg.github.com/carlomazzaferro/docker-ci/$IMAGE_NAME:$VERSION \
+                       --build-arg TERRAFORM_VERSION=$TERRAFORM_VERSION \
+                       -f ./concourse/Dockerfile.concourse.alpine.python
+          docker tag docker.pkg.github.com/reemote/docker-ci/$IMAGE_NAME:$VERSION carlomazzaferro/$IMAGE_NAME:$VERSION
+
+      - name: Push to Dockerhub
+        run: |
+          echo $DOCKERHUB_TOKEN | docker login -u carlomazzaferro --password-stdin
+          docker push carlomazzaferro/$IMAGE_NAME:$VERSION
+
+  alpine-python-terraform-aws-dind:
+    name: alpine-python-terraform-aws-dind
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: alpine-python-terraform-aws-dind
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+
+      - name: Build
+        run: |
+          docker build -t docker.pkg.github.com/reemote/docker-ci/$IMAGE_NAME:$VERSION \
+                       --build-arg TERRAFORM_VERSION=$TERRAFORM_VERSION \
+                       --build-arg DOCKER_VERSION=$DOCKER_VERSION \
+                       --build-arg DOCKER_COMPOSE_VERSION=$DOCKER_COMPOSE_VERSION \
+                       -f ./concourse/Dockerfile.concourse.dind.awscli
+          docker tag docker.pkg.github.com/reemote/docker-ci/$IMAGE_NAME:$VERSION carlomazzaferro/$IMAGE_NAME:$VERSION
+
+      - name: Push to Dockerhub
+        run: |
+          echo $DOCKERHUB_TOKEN | docker login -u carlomazzaferro --password-stdin
+          docker push carlomazzaferro/$IMAGE_NAME:$VERSION
+
+  buildpack-terraform:
+    name: buildpack-terraform
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: buildpack-terraform
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+
+      - name: Build
+        run: |
+          docker build -t docker.pkg.github.com/reemote/docker-ci/$IMAGE_NAME:$VERSION \
+                       --build-arg TERRAFORM_VERSION=$TERRAFORM_VERSION \
+                       -f ./generic/Dockerfile.buildpack.terraform
+          docker tag docker.pkg.github.com/reemote/docker-ci/$IMAGE_NAME:$VERSION carlomazzaferro/$IMAGE_NAME:$VERSION
+
+      - name: Push to Dockerhub
+        run: |
+          echo $DOCKERHUB_TOKEN | docker login -u carlomazzaferro --password-stdin
+          docker push carlomazzaferro/$IMAGE_NAME:$VERSION
+
+  circle-ci-terraform-awscli:
+    name: circle-ci-terraform-awscli
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: circle-ci-terraform-awscli
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+
+      - name: Build
+        run: |
+          docker build -t docker.pkg.github.com/reemote/docker-ci/$IMAGE_NAME:$VERSION \
+                       --build-arg TERRAFORM_VERSION=$TERRAFORM_VERSION \
+                       -f ./circleci/Dockerfile.circle.terraform.awscli
+          docker tag docker.pkg.github.com/reemote/docker-ci/$IMAGE_NAME:$VERSION carlomazzaferro/$IMAGE_NAME:$VERSION
+
+      - name: Push to Dockerhub
+        run: |
+          echo $DOCKERHUB_TOKEN | docker login -u carlomazzaferro --password-stdin
+          docker push carlomazzaferro/$IMAGE_NAME:$VERSION
+
+
+
+
+
+

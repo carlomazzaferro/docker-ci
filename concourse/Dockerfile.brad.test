@@ -1,5 +1,0 @@
-FROM bradbytecubed/mdas-pipeline
-
-RUN pip install awscli
-
-ENTRYPOINT sh
