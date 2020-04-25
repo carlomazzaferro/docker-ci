@@ -10,20 +10,13 @@ RUN apk add --no-cache \
         openblas-dev g++ gfortran file binutils \
         musl-dev python3-dev && \
     apk add libstdc++ openblas && \
-    \
     ln -s locale.h /usr/include/xlocale.h && \
-    \
-    pip install sagemaker && \
-    \
     rm -r /root/.cache && \
     find /usr/lib/python3.*/ -name 'tests' -exec rm -r '{}' + && \
     find /usr/lib/python3.*/site-packages/ -name '*.so' -print -exec sh -c 'file "{}" | grep -q "not stripped" && strip -s "{}"' \; && \
-    \
     rm /usr/include/xlocale.h && \
-    \
     apk del .build-dependencies
 
-RUN pip install awscli
 
 ARG TERRAFORM_VERSION
 ENV TERRAFORM_VERSION=$TERRAFORM_VERSION
