@@ -3,7 +3,8 @@ FROM frolvlad/alpine-python3
 RUN apk --no-cache add \
     bash \
     unzip \
-    curl
+    curl \
+    make
 
 
 RUN pip install awscli
