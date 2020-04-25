@@ -28,7 +28,8 @@ RUN groupadd --gid 3434 circleci \
   && echo 'Defaults    env_keep += "DEBIAN_FRONTEND"' >> /etc/sudoers.d/env_keep
 
 # BEGIN IMAGE CUSTOMIZATIONS
-ENV TERRAFORM_VERSION=0.11.11
+ARG TERRAFORM_VERSION
+ENV TERRAFORM_VERSION=$TERRAFORM_VERSION
 
 RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 RUN unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /bin

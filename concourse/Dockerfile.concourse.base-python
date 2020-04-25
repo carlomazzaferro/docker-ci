@@ -1,6 +1,0 @@
-FROM python:3.6.6
-
-RUN pip install sagemaker==1.18.4
-RUN pip install awscli
-
-ENTRYPOINT sh

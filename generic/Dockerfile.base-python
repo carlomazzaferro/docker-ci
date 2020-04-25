@@ -1,0 +1,18 @@
+FROM python:3.7-slim
+
+ENV AWS_REGION=eu-central-1
+ENV AWS_DEFAULT_REGION=eu-central-1
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    make \
+    zip \
+    unzip \
+    jq \
+    curl \
+    git \
+    ssh
+
+RUN pip install awscli
+
+ENTRYPOINT sh
