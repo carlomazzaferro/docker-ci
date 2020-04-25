@@ -4,7 +4,8 @@ RUN apk --no-cache add \
     bash \
     unzip \
     curl \
-    make
+    make \
+    ncurses
 
 
 RUN pip install awscli
