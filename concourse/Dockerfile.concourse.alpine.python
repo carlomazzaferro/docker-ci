@@ -5,6 +5,8 @@ RUN apk --no-cache add \
     unzip \
     curl \
     make \
+    jq \
+    yq \
     ncurses
 
 
