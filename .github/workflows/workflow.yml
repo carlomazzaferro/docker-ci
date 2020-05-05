@@ -9,7 +9,7 @@ env:
   DOCKER_VERSION: 19.03.8
   DOCKER_COMPOSE_VERSION: 1.25.4
   VERSION: latest
-  KF_VERSIONL: v1.0.2
+  KF_VERSION: v1.0.2
 
 
 jobs:
