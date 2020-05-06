@@ -84,7 +84,7 @@ start_docker() {
   mkdir -p /var/log
   mkdir -p /var/run
 
-  sanitize_cgroups
+#  sanitize_cgroups
 
   # check for /proc/sys being mounted readonly, as systemd does
   if grep '/proc/sys\s\+\w\+\s\+ro,' /proc/mounts >/dev/null; then

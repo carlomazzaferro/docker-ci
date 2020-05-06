@@ -79,7 +79,6 @@ jobs:
           docker build -t docker.pkg.github.com/carlomazzaferro/docker-ci/$IMAGE_NAME:$VERSION \
                        -f ./concourse/Dockerfile.concourse.dind.awscli \
                        --build-arg TERRAFORM_VERSION=$TERRAFORM_VERSION \
-                       --build-arg DOCKER_VERSION=$DOCKER_VERSION \
                        --build-arg DOCKER_COMPOSE_VERSION=$DOCKER_COMPOSE_VERSION \
                        ./concourse/
           docker tag docker.pkg.github.com/carlomazzaferro/docker-ci/$IMAGE_NAME:$VERSION carlomazzaferro/$IMAGE_NAME:$VERSION

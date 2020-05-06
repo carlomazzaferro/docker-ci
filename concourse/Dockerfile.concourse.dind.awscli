@@ -1,15 +1,10 @@
-FROM jfloff/alpine-python:3.7-slim
-
+FROM docker:19.03
 
 ARG TERRAFORM_VERSION
-ARG DOCKER_VERSION
 ARG DOCKER_COMPOSE_VERSION
 
-
-ENV DOCKER_CHANNEL=stable \
-    DOCKER_VERSION=$DOCKER_VERSION \
-    DOCKER_COMPOSE_VERSION=$DOCKER_COMPOSE_VERSION \
-    DOCKER_SQUASH=0.2.0
+ENV DOCKER_COMPOSE_VERSION=$DOCKER_COMPOSE_VERSION
+ENV TERRAFORM_VERSION=$TERRAFORM_VERSION
 
 # Install Docker, Docker Compose, Docker Squash
 RUN apk --update --no-cache add \
@@ -25,14 +20,23 @@ RUN apk --update --no-cache add \
         libressl-dev \
         make \
         && \
-    apk upgrade && \
-    curl -fL "https://download.docker.com/linux/static/${DOCKER_CHANNEL}/x86_64/docker-${DOCKER_VERSION}.tgz" | tar zx && \
-    mv /docker/* /bin/ && chmod +x /bin/docker*
+    apk upgrade
 
+ENV PYTHONUNBUFFERED=1
+
+RUN echo "**** install Python ****" && \
+    apk add --no-cache python3 && \
+    if [ ! -e /usr/bin/python ]; then ln -sf python3 /usr/bin/python ; fi && \
+    \
+    echo "**** install pip ****" && \
+    python3 -m ensurepip && \
+    rm -r /usr/lib/python*/ensurepip && \
+    pip3 install --no-cache --upgrade pip setuptools wheel && \
+    if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi
+
+RUN apk add python3-dev
 
 RUN pip3 install docker-compose==${DOCKER_COMPOSE_VERSION} && \
-    curl -fL "https://github.com/jwilder/docker-squash/releases/download/v${DOCKER_SQUASH}/docker-squash-linux-amd64-v${DOCKER_SQUASH}.tar.gz" | tar zx && \
-    mv /docker-squash* /bin/ && chmod +x /bin/docker-squash* && \
     rm -rf /var/cache/apk/* && \
     rm -rf /root/.cache
 
@@ -40,10 +44,10 @@ RUN pip3 install awscli
 
 COPY entrypoint.sh /bin/entrypoint.sh
 
-ENV TERRAFORM_VERSION=$TERRAFORM_VERSION
 
 COPY ./tf_install_alpine.sh /root/tf_install_alpine.sh
 
 RUN /root/tf_install_alpine.sh -i ${TERRAFORM_VERSION}
 
 ENTRYPOINT ["entrypoint.sh"]
+
