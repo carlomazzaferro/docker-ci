@@ -33,8 +33,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=sha,format=short
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{raw}}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
@@ -46,5 +45,37 @@ jobs:
           file: redis/Dockerfile
 
     outputs:
-      tags: ${{ steps.meta.outputs.tags }}
-      labels: ${{ steps.meta.outputs.labels }}
+      json: ${{ steps.meta.outputs.json }}
+
+  tests:
+    runs-on: ubuntu-latest
+    needs: [build-and-push-router-image]
+    env:
+      ROUTER_IMAGE: ${{ fromJSON(needs.build-and-push-router-image.outputs.json).tags[0] }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: run smoke tests
+        run: |
+          echo ${ROUTER_IMAGE}
+
+    outputs:
+      router-tags: ${{ needs.build-and-push-router-image.outputs.json }}
+
+  smoke:
+    runs-on: ubuntu-latest
+    needs: [ test ]
+    env:
+      ROUTER_IMAGE: ${{ fromJSON(needs.build-and-push-router-image.outputs.json).tags[0] }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: run smoke tests
+        run: |
+          echo ${ROUTER_IMAGE}
+
+    outputs:
+      router-tags: ${{ needs.build-and-push-router-image.outputs.json }}
+
