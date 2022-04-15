@@ -65,7 +65,7 @@ jobs:
 
   smoke:
     runs-on: ubuntu-latest
-    needs: [ test ]
+    needs: [ tests ]
     env:
       ROUTER_IMAGE: ${{ fromJSON(needs.build-and-push-router-image.outputs.json).tags[0] }}
     steps:
